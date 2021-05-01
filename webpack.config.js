@@ -1,25 +1,15 @@
 const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './client/index.jsx',
   devtool: 'source-map',
-  // devtool: 'inline-source-map',
-  // devServer: {
-  //   proxy: {
-  //     '/': 'http://localhost:3002',
-  //   },
-  //   contentBase: './public',
-  //   hot: true,
-  // },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
+        use: ['babel-loader']
       },
       {
         test: /\.css$/i,
@@ -27,10 +17,11 @@ module.exports = {
       },
     ],
   },
-  // plugins: [new HtmlWebpackPlugin({
-  //   title: 'Production',
-  //   template: './public/index.html',
-  // })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, "client", "index.html")
+    })
+  ],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
