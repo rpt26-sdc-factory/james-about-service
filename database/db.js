@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 
-if (process.env.NODE_ENV !== 'production' && !process.env.CI) {
-  // eslint-disable-next-line global-require
-  require('dotenv').config();
-}
-
 const { Schema } = mongoose;
 
-mongoose.connect(process.env.ABOUT_MONGODB_URI, {
+console.log(process.env.ABOUT_MONGODB_URI + '/' + process.env.ABOUT_DATABASE);
+mongoose.connect(process.env.ABOUT_MONGODB_URI + '/' + process.env.ABOUT_DATABASE, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

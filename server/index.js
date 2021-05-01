@@ -1,6 +1,8 @@
+const path = require('path');
+require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
+
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const db = require('../database/model');
 
 const app = express();
@@ -33,7 +35,7 @@ app.get('/*', (req, res) => {
 });
 
 // Allows the server to listen if it's in dev or prod, but not while testing
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.ENVIRONMENT !== 'test') {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });

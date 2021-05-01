@@ -31,13 +31,13 @@ class About extends React.Component {
     }
     courseID = !courseID ? 1 : courseID;
     console.log('fetching data with course id', courseID);
-    fetch(`http://3.20.191.60/api/about/${courseID}`)
+    fetch(`/api/about/${courseID}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({ courseInfo: data });
       })
       .catch((err) => console.error(err));
-    fetch('http://54.176.19.199:3006/api/svgs')
+    fetch('/api/svgs')
       .then((response) => response.json())
       .then((data) => {
         this.setState({ svgs: data });

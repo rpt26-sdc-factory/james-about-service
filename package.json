@@ -1,20 +1,24 @@
 {
   "name": "about",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "version": "",
   "description": "",
-  "author": "Shane Sutro",
+  "author": "James Henderson",
   "license": "",
   "engines": {
     "node": ">=6.13.0"
   },
   "scripts": {
-    "server-start": "nodemon ./server/index.js",
-    "start": "node ./server/index.js",
-    "watch": "webpack --watch",
+    "seed": "node ./database/seedRunner.js production",
+    "start": "node ./server/index.js production",
+    "compile": "webpack --mode production",
+    "seed-dev": "node ./database/seedRunner.js development",
+    "start-dev": "nodemon ./server/index.js development",
+    "compile-dev": "webpack --watch --mode development",
     "react-start": "webpack serve --open",
-    "build": "webpack && docker build -t shanesutro/service-about .",
-    "test": "jest --coverage",
+    "test": "jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
@@ -25,7 +29,7 @@
     "core-js": "^3.9.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.11.18",
+    "mongoose": "^5.12.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "regenerator-runtime": "^0.13.7"
@@ -39,13 +43,6 @@
     "css-loader": "^5.1.2",
     "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "fetch-mock-jest": "^1.5.1",
     "html-webpack-plugin": "^5.3.0",
     "jest": "^26.6.3",
