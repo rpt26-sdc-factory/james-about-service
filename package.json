@@ -11,7 +11,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "seed": "node ./database/seedRunner.js production",
+    "seed": "ENVIRONMENT=production node ./database/seedRunner.js",
     "start": "node ./server/index.js production",
     "compile": "webpack --mode production",
     "seed-dev": "node ./database/seedRunner.js development",

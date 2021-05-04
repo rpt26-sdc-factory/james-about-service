@@ -1,7 +1,6 @@
 const path = require('path');
 
-const environment = process.argv[2];
-switch(environment) {
+switch(process.env.ENVIRONMENT) {
   case 'development':
   default:
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.dev.env'))});
