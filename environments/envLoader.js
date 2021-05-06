@@ -1,7 +1,6 @@
 const path = require('path');
 
-const environment = process.argv[2];
-switch(environment) {
+switch(process.env.NODE_ENV) {
   case 'development':
   default:
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.dev.env'))});
@@ -9,7 +8,7 @@ switch(environment) {
   case 'production':
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.prod.env'))});
     break;
-  case 'testing':
+  case 'test':
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.test.env'))});
     break;
 }

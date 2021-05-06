@@ -141,16 +141,20 @@ const generateRecords = async (numToGenerate) => {
 };
 
 const seedDatabase = async (Description) => {
-  console.time('Database Seed');
-  const records = await generateRecords(100);
-  Description.insertMany(records, (err, res) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(res);
-    }
-  });
-  console.timeEnd('Database Seed');
+  return new Promise(async (resolve, reject) => {
+    console.time('Database Seed');
+    const records = await generateRecords(parseInt(process.env.SEEDCOUNT));
+    Description.insertMany(records, (err, res) => {
+      if (err) {
+        console.error(err);
+        reject();
+      } else {
+        console.timeEnd('Database Seed');
+        console.log(res);
+        resolve();
+      }
+    });
+  })
 };
 
 module.exports = {

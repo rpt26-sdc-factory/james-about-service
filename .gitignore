@@ -26,4 +26,4 @@ dist/
 public/
 
 ## Env variables ##
-.env
+*.env
