@@ -12,17 +12,16 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node ./server/index.js production",
-    "seed-dev": "NODE_ENV=development node ./database/seedRunner.js",
+    "start-dev": "NODE_ENV=development nodemon ./server/index.js",
 
     "compile": "webpack --mode production",
     "compile-dev": "webpack --watch --mode development",
 
     "seed": "NODE_ENV=production node ./database/seedRunner.js",
-    "start-dev": "NODE_ENV=development nodemon ./server/index.js",
-    "seed-test": "NODE_ENV=test node ./database/seedRunner.js",
+    "seed-dev": "NODE_ENV=development node ./database/seedRunner.js",
 
     "react-start": "webpack serve --open",
-    "test": "npm run seed-test; jest --coverage test",
+    "test": "NODE_ENV=test node ./database/seedRunner.js; jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
