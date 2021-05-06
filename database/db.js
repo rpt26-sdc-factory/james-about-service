@@ -8,9 +8,18 @@ mongoose.connect(process.env.ABOUT_MONGODB_URI + '/' + process.env.ABOUT_DATABAS
   useUnifiedTopology: true,
 });
 
+
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', console.log.bind(console, 'connected!'));
+const dbConnectionPromise = new Promise((resolve, reject) => {
+  db.on('error', () => {
+    console.log('mongo connection failed');
+    reject();
+  });
+  db.once('open', () => {
+    console.log('mongo connected!')
+    resolve();
+  });
+});
 
 const descriptionSchema = new Schema({
   course_id: Number,
@@ -29,4 +38,5 @@ const descriptionSchema = new Schema({
 module.exports = {
   db,
   descriptionSchema,
+  dbConnectionPromise
 };

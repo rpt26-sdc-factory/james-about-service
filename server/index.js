@@ -80,7 +80,7 @@ app.use(express.static('./public'));
 }
 
 // Allows the server to listen if it's in dev or prod, but not while testing
-if (process.env.ENVIRONMENT !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });

@@ -11,14 +11,18 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "seed": "ENVIRONMENT=production node ./database/seedRunner.js",
-    "start": "node ./server/index.js production",
+    "start": "NODE_ENV=production node ./server/index.js production",
+    "seed-dev": "NODE_ENV=development node ./database/seedRunner.js",
+
     "compile": "webpack --mode production",
-    "seed-dev": "node ./database/seedRunner.js development",
-    "start-dev": "nodemon ./server/index.js development",
     "compile-dev": "webpack --watch --mode development",
+
+    "seed": "NODE_ENV=production node ./database/seedRunner.js",
+    "start-dev": "NODE_ENV=development nodemon ./server/index.js",
+    "seed-test": "NODE_ENV=test node ./database/seedRunner.js",
+
     "react-start": "webpack serve --open",
-    "test": "jest --coverage test",
+    "test": "npm run seed-test; jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
