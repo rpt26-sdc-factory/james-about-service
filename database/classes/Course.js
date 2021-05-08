@@ -1,7 +1,5 @@
 const faker = require('faker');
 
-const genPercent = () => (Math.floor(Math.random() * 100) / 100);
-
 const genLangs = () => {
   const languages = [
     'Arabic',
@@ -42,17 +40,17 @@ const genOutcomes = () => {
   return [
     {
       icon: 'careerDirectionSVG',
-      pct: genPercent(),
+      pct: Math.random(),
       outcome: 'started a new career after completing these courses',
     },
     {
       icon: 'careerBenefitSVG',
-      pct: genPercent(),
+      pct: Math.random(),
       outcome: 'got a tangible career benefit from this course',
     },
     {
       icon: 'careerPromotionSVG',
-      pct: genPercent(),
+      pct: Math.random(),
       outcome: 'got a pay increase or promotion',
     },
   ];
