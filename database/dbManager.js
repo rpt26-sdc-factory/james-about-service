@@ -1,18 +1,33 @@
-
-
 class DBManager {
   constructor(db) {
     this.database = db;
+
+    switch(this.database) {
+      case 'mongo':
+      default:
+        //Mongo interaction Code goes here
+        break;
+      case 'postgres':
+        //Postgres interaction code goes here
+        break;
+      case 'cassandra':
+        //Cassandra interaction code goes here
+        break;
+    }
+
   }
 
   insertCourse() {
     switch(this.database) {
       case 'mongo':
       default:
+        //Mongo interaction Code goes here
         break;
       case 'postgres':
+        //Postgres interaction code goes here
         break;
       case 'cassandra':
+        //Cassandra interaction code goes here
         break;
     }
   };
@@ -20,10 +35,13 @@ class DBManager {
     switch(this.database) {
       case 'mongo':
       default:
+        //Mongo interaction Code goes here
         break;
       case 'postgres':
+        //Postgres interaction code goes here
         break;
       case 'cassandra':
+        //Cassandra interaction code goes here
         break;
     }
   };
@@ -31,10 +49,13 @@ class DBManager {
     switch(this.database) {
       case 'mongo':
       default:
+        //Mongo interaction Code goes here
         break;
       case 'postgres':
+        //Postgres interaction code goes here
         break;
       case 'cassandra':
+        //Cassandra interaction code goes here
         break;
     }
   };
@@ -42,10 +63,13 @@ class DBManager {
     switch(this.database) {
       case 'mongo':
       default:
+        //Mongo interaction Code goes here
         break;
       case 'postgres':
+        //Postgres interaction code goes here
         break;
       case 'cassandra':
+        //Cassandra interaction code goes here
         break;
     }
   };
