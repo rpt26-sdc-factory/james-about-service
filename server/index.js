@@ -12,7 +12,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 //Load Database
-const dbManager = require('../database/model');
+const DBManager = require('../database/DBManager');
+const db = new DBManager('mongo');
 
 //Register Middleware
 app.use(cors());
@@ -24,8 +25,8 @@ app.use(express.static('./public'));
   //Create
   app.post('/api/about', (req, res) => {
     if(req.body.courseObj.course_id !== undefined) {
-      dbManager.insertCourse(req.body.courseObj)
-        .then((data) => {
+      db.insertCourse(req.body.courseObj)
+        .then(() => {
           res.sendStatus(201);
         })
         .catch((err) => {
@@ -38,12 +39,64 @@ app.use(express.static('./public'));
 
   //Read
   app.get('/api/about/:id', (req, res) => {
-    dbManager.getCourse(req.params.id)
+    db.getCourse(req.params.id)
       .then((data) => {
         if (!data) {
           res.sendStatus(404);
         } else {
-          res.send(data).status(200);
+          var dataToReturn = {
+            what_you_will_learn: data.what_you_will_learn,
+            skills_you_will_gain: data.skills_you_will_gain,
+            course_id: data.course_id,
+            recent_views: data.recent_views,
+            description: data.description
+          };
+          dataToReturn.metadata = [
+            {
+              icon: 'sharableCertificateSVG',
+              title: 'Shareable Certificate',
+              subtitle: 'Earn a Certificate upon completion',
+            },
+            {
+              icon: 'onlineSVG',
+              title: '100% online',
+              subtitle: 'Start instantly and learn at your own schedule',
+            },
+            {
+              icon: 'deadlinesSVG',
+              title: 'Flexible Deadlines',
+              subtitle: 'Reset deadlines in accordance to your schedule',
+            },
+            {
+              icon: 'hoursSVG',
+              title: `Approx. ${data.metadata.hours} hours to complete`,
+              subtitle: '',
+            },
+            {
+              icon: 'languagesSVG',
+              title: 'English',
+              subtitle: `Subtitles: ${'English, ' + data.metadata.subtitles}`,
+            },
+          ];
+          dataToReturn.learner_career_outcomes = [
+            {
+              icon: 'careerDirectionSVG',
+              pct: data.learner_career_outcomes.direction,
+              outcome: 'started a new career after completing these courses',
+            },
+            {
+              icon: 'careerBenefitSVG',
+              pct: data.learner_career_outcomes.benefit,
+              outcome: 'got a tangible career benefit from this course',
+            },
+            {
+              icon: 'careerPromotionSVG',
+              pct: data.learner_career_outcomes.promo,
+              outcome: 'got a pay increase or promotion',
+            },
+          ];
+          console.log(dataToReturn)
+          res.send(dataToReturn).status(200);
         }
       })
       .catch(() => {
@@ -53,7 +106,7 @@ app.use(express.static('./public'));
 
   //Update
   app.put('/api/about/:id', (req, res) => {
-    dbManager.updateCourse(req.params.id, req.body.courseObj)
+    db.updateCourse(req.params.id, req.body.courseObj)
       .then((modCount) => {
         modCount ? res.sendStatus(204) : res.sendStatus(404);
       })
@@ -64,7 +117,7 @@ app.use(express.static('./public'));
 
   //Delete
   app.delete('/api/about/:id', (req, res) => {
-    dbManager.deleteCourse(req.params.id)
+    db.deleteCourse(req.params.id)
       .then(() => {
         res.sendStatus(200);
       })

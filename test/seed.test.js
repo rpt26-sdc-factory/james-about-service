@@ -2,11 +2,6 @@
 const seedFunctions = require('../database/seedFunctions.js');
 
 describe('Should seed database with realistic data', () => {
-  test('Creates a random percentage between 0 and 100', (done) => {
-    expect(seedFunctions.generateRandomPercentage()).toBeLessThanOrEqual(1);
-    expect(seedFunctions.generateRandomPercentage()).toBeGreaterThanOrEqual(0);
-    done();
-  });
 
   test('Should generate random metadata', async (done) => {
     const metadata = await seedFunctions.generateMetadata();

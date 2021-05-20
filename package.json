@@ -15,19 +15,21 @@
     "start-dev": "NODE_ENV=development nodemon ./server/index.js",
     "compile": "webpack --mode production",
     "compile-dev": "webpack --watch --mode development",
-    "seed": "NODE_ENV=production node ./database/seedRunner.js",
-    "seed-dev": "NODE_ENV=development node ./database/seedRunner.js",
-    "seed-test": "NODE_ENV=test node ./database/seedRunner.js",
+    "seed": "NODE_ENV=production node ./database/seed.js",
+    "seed-dev": "NODE_ENV=development node ./database/seed.js",
+    "seed-dev-full": "NODE_ENV=fullscale-dev node ./database/seed.js",
+    "seed-test": "NODE_ENV=test node ./database/seed.js",
     "react-start": "webpack serve --open",
     "test": "npm run seed-test; jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "benchmarkSeed": "node ./database/benchmark.js"
+    "benchmarkSeed": "NODE_ENV=benchmark node ./database/benchmark.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.13.10",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "cassandra-driver": "^4.6.2",
     "core-js": "^3.9.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -35,7 +37,8 @@
     "mongoose": "^5.12.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "regenerator-runtime": "^0.13.7"
+    "regenerator-runtime": "^0.13.7",
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
