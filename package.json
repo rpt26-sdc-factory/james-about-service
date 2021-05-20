@@ -20,7 +20,7 @@
     "seed-dev-full": "NODE_ENV=fullscale-dev node ./database/seed.js",
     "seed-test": "NODE_ENV=test node ./database/seed.js",
     "react-start": "webpack serve --open",
-    "test": "npm run seed-test; jest --coverage test",
+    "test": "NODE_ENV=test node ./database/seedRunner.js; jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "benchmarkSeed": "NODE_ENV=benchmark node ./database/benchmark.js"
