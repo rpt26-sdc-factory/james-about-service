@@ -7,20 +7,35 @@ const wait = (time) => {
   })
 }
 
+//for when failure is not an option
+const retryUntilSuccess = async (delay, asyncFunction, ...args) => {
+  return new Promise(async (resolve) => {
+    while (true) {
+      try {
+        var x = await asyncFunction(...args);
+        resolve(x);
+        return null;
+      } catch (e) {
+        console.log(e);
+        await new Promise((resolve) => {
+          setTimeout(resolve, delay);
+        });
+      }
+    }
+  })
+};
+
 
 class DBManager {
-  constructor(db = 'mongo') {
+  constructor(db = process.env.USE_DBS.split(',')[0]) {
+
+    console.log(`Created ${db} manager.`);
     this.database = db;
-    this.mongo = {};
-    this.cassandra = {};
-    this.postgres = {};
-    this.mysql = {};
-    this.json = {};
+    this[db] = {};
     this.connection;
 
-    switch(this.database) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         this.connection = require('./mongo/index');
         this.mongo.CourseModel = require('./mongo/models/courseModel.js');
@@ -28,20 +43,19 @@ class DBManager {
 
       case 'postgres':
         //Postgres interaction code goes here
-        this.connection = new Promise((r) => {r()});
+        this.connection = new Promise((r) => { r() });
         break;
 
       case 'cassandra':
         //Cassandra interaction code goes here
         this.cassandra = require('./cassandra/index');
-        this.cassandra.sRequests = 0;
         this.connection = this.cassandra.client.connect()
           .then(this.cassandra.client.execute(this.cassandra.queries.createTable));
         break;
 
       case 'mysql':
         //mysql interaction code goes here
-        this.connection = new Promise((r) => {r()});
+        this.connection = new Promise((r) => { r() });
         break;
 
       case 'json':
@@ -62,9 +76,8 @@ class DBManager {
   }
 
   insertCourse(courseObj) {
-    switch(this.database) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         return this.connection.then(() => {
           return this.mongo.CourseModel.create(courseObj);
@@ -79,16 +92,7 @@ class DBManager {
       case 'cassandra':
         //Cassandra interaction code goes here
         return this.connection.then(() => {
-          return new Promise(async (resolve, reject) => {
-            while(true) {
-              try {
-                await this.cassandra.client.execute(this.cassandra.queries.insert, courseObj, {prepare: true});
-                resolve();
-              } catch (error) {
-                await wait(50);
-              };
-            }
-          });
+          return retryUntilSuccess(50, this.cassandra.client.execute.bind(this.cassandra.client), courseObj, { prepare: true });
         });
         break;
 
@@ -100,13 +104,12 @@ class DBManager {
         //JSON interaction code goes here
         return this.json.write(this.json.filepath, courseObj);
     }
-    return new Promise((r) => {r()});
+    return new Promise((r) => { r() });
   };
 
   insertManyCourses(courseObjArr) {
-    switch(this.database) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         return this.connection.then(() => {
           return this.mongo.CourseModel.insertMany(courseObjArr);
@@ -123,7 +126,7 @@ class DBManager {
         var batches = [];
         var curBatch = [];
         while (courseObjArr.length) {
-          curBatch.push({query: this.cassandra.queries.insert, params: courseObjArr.pop()});
+          curBatch.push({ query: this.cassandra.queries.insert, params: courseObjArr.pop() });
           if (curBatch.length === 5 || courseObjArr.length === 0) {
             batches.push([...curBatch]);
             curBatch = [];
@@ -131,18 +134,8 @@ class DBManager {
         }
 
         return this.connection.then(() => {
-          return Promise.allSettled(batches.map(batch => {
-            return new Promise(async (resolve, reject) => {
-              while(true) {
-                try {
-                  await this.cassandra.client.batch(batch, {prepare: true});
-                  resolve();
-                  return null;
-                } catch (error) {
-                  await wait(300);
-                };
-              }
-            });
+          return Promise.all(batches.map(batch => {
+            return retryUntilSuccess(300, this.cassandra.client.batch.bind(this.cassandra.client), batch, { prepare: true });
           }));
         });
         break;
@@ -159,26 +152,25 @@ class DBManager {
               err ? reject(err) : resolve(this.json.filepath);
             })
           })
-          .then(() => {
-            return ',' + JSON.stringify(courseObjArr).slice(1,-1);
-          })
-          .catch(() => {
-            return JSON.stringify(courseObjArr).slice(0,-1);
-          })).then((data) => {
-            return this.json.write(data);
-          });
+            .then(() => {
+              return ',' + JSON.stringify(courseObjArr).slice(1, -1);
+            })
+            .catch(() => {
+              return JSON.stringify(courseObjArr).slice(0, -1);
+            })).then((data) => {
+              return this.json.write(data);
+            });
         });
     }
-    return new Promise((r) => {r()});
+    return new Promise((r) => { r() });
   };
 
   getCourse(id) {
-    switch(this.database) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         return this.mongo.CourseModel.findOne({ course_id: id }).catch((err) => {
-          console.err('MongoDB: Error getting course' + id +'.');
+          console.err('MongoDB: Error getting course' + id + '.');
           console.err(err);
         });
 
@@ -188,6 +180,9 @@ class DBManager {
 
       case 'cassandra':
         //Cassandra interaction code goes here
+        return this.connection.then(() => {
+          return this.cassandra.client.execute(this.cassandra.queries.getByID, [id + ''], { prepare: true });
+        });
         break;
 
       case 'mysql':
@@ -201,13 +196,12 @@ class DBManager {
           reject(err);
         });
     }
-    return new Promise((r) => {r()});
+    return new Promise((r) => { r() });
   };
 
-  updateCourse() {
-    switch(this.database) {
+  updateCourse(id, updateObj) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         break;
 
@@ -217,6 +211,11 @@ class DBManager {
 
       case 'cassandra':
         //Cassandra interaction code goes here
+        return Promise.all(Object.keys(updateObj).map(key => {
+          return retryUntilSuccess(50, this.cassandra.client.execute.bind(this.cassandra.client), this.cassandra.queries.update[key], [updateObj[key], id], { prepare: true });
+        })).then((results) => {
+          return results[0].rows[0]['[applied]'];
+        });
         break;
 
       case 'mysql':
@@ -230,13 +229,12 @@ class DBManager {
           reject(err);
         });
     }
-    return new Promise((r) => {r()});
+    return new Promise((r) => { r() });
   };
 
-  deleteCourse() {
-    switch(this.database) {
+  deleteCourse(id) {
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         break;
 
@@ -246,6 +244,11 @@ class DBManager {
 
       case 'cassandra':
         //Cassandra interaction code goes here
+        return this.connection.then(() => {
+          return this.cassandra.client.execute(this.cassandra.queries.deleteByID, [id + ''], { prepare: true }).then((results) => {
+            console.log(results);
+          });
+        });
         break;
 
       case 'mysql':
@@ -260,14 +263,13 @@ class DBManager {
           reject(err);
         });
     }
-    return new Promise((r) => {r()});
+    return new Promise((r) => { r() });
   };
 
   deleteAllCourses() {
-    console.log('Deleting all courses in ' +  this.database +' database!');
-    switch(this.database) {
+    console.log('Deleting all courses in ' + this.database + ' database!');
+    switch (this.database) {
       case 'mongo':
-      default:
         //Mongo interaction Code goes here
         return this.connection.then(() => {
           return this.mongo.CourseModel.deleteMany({});
@@ -309,7 +311,7 @@ class DBManager {
   };
 
   closeConnection() {
-    switch(this.database) {
+    switch (this.database) {
       case 'mongo':
       default:
         //Mongo interaction Code goes here

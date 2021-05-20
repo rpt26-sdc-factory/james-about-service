@@ -1,5 +1,4 @@
 const cassandra = require('cassandra-driver');
-console.error('CASSANDRA PERFORMANCE IS TERRIBLE, BE WARNED');
 
 var keyspace = process.env.ABOUT_DATABASE.replace(/-/g, '__');
 
@@ -36,8 +35,15 @@ var queries = {
     ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
 
   getByID: `SELECT * FROM courses WHERE course_id = ?`,
-  updateByID: '',
-  deleteByID: ''
+  update: {
+    recent_views: 'UPDATE courses SET recent_views = ? WHERE course_id = ? IF EXISTS',
+    description: 'UPDATE courses SET description = ? WHERE course_id = ? IF EXISTS',
+    learner_career_outcomes: 'UPDATE courses SET learner_career_outcomes = ? WHERE course_id = ? IF EXISTS',
+    metadata: 'UPDATE courses SET metadata = ? WHERE course_id = ? IF EXISTS',
+    what_you_will_learn: 'UPDATE courses SET what_you_will_learn = ? WHERE course_id = ? IF EXISTS',
+    skills_you_will_gain: 'UPDATE courses SET skills_you_will_gain = ? WHERE course_id = ? IF EXISTS',
+  },
+  deleteByID: 'DELETE FROM courses WHERE course_id = ?'
 };
 
 module.exports = {keyspace, client, queries};

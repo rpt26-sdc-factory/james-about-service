@@ -7,6 +7,7 @@ switch(process.env.NODE_ENV) {
     break;
   case 'benchmark':
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.bm.env'))});
+    break;
   case 'fullscale-dev':
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.dev.fullscale.env'))});
     break;

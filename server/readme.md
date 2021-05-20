@@ -84,6 +84,35 @@ samplePost = {
   ]
 }
 ```
+##### GET /api/about/:id/concise
+```
+{
+  "course_id": "2",
+  "description": "Dolores et libero incidunt. Quae occaecati sit enim. Unde nemo temporibus sit sunt. Facere non autem. Laboriosam perferendis minima.\n \rVoluptas quasi ratione quaerat et iure voluptatem non. Ex qui facilis qui incidunt in ut veniam. Culpa voluptatem temporibus minus amet qui necessitatibus sed est. Aut nihil qui exercitationem. Doloribus esse nihil.\n \rSed aspernatur non est necessitatibus enim quisquam. At blanditiis error quidem laborum et. Est cupiditate est asperiores eius eos eum. Quae nam debitis sint repudiandae.\n \rExercitationem aspernatur exercitationem in sit. Voluptatem ut sint. Voluptatem dolor sit excepturi perferendis modi. Omnis dolores facilis amet nihil omnis et velit. Quaerat quis praesentium corrupti sunt deleniti eligendi dicta omnis.",
+  "learner_career_outcomes": {
+    "benefit": 0.6000000238418579,
+    "direction": 0.05999999865889549,
+    "promo": 0.6899999976158142
+  },
+  "metadata": {
+    "hours": "165",
+    "subtitles": ""
+  },
+  "recent_views": 60934477,
+  "skills_you_will_gain": [
+    "laudantium illum",
+    "amet commodi porro",
+    "est eius",
+    "provident eveniet illo"
+  ],
+  "what_you_will_learn": [
+    "Doloribus nihil et fugiat officia. Aspernatur eveniet et.",
+    "Quos aut molestiae dolores. Nostrum praesentium quis exercitationem aut enim.",
+    "Optio reiciendis nihil rem sint ut ducimus sint. Accusamus accusantium et.",
+    "Eligendi ut officiis et enim earum explicabo qui aut. Enim rerum est qui eius harum dolores tempore."
+  ]
+}
+```
 
 ## Update
   - returns a status code of 204 if record is successfully updated.

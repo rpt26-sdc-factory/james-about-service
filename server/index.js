@@ -13,7 +13,7 @@ const bodyParser = require('body-parser');
 
 //Load Database
 const DBManager = require('../database/DBManager');
-const db = new DBManager('mongo');
+const db = new DBManager();
 
 //Register Middleware
 app.use(cors());
@@ -33,7 +33,7 @@ app.use(express.static('./public'));
           res.status(500).send(err);
         })
     } else {
-      res.status(400).send('property course_id must be defined on object with name "courseObj".');
+      res.status(400).send('property course_id must be defined on an object with name "courseObj".');
     }
   });
 
@@ -104,8 +104,26 @@ app.use(express.static('./public'));
       });
   });
 
+  app.get('/api/about/:id/concise', (req, res) => {
+    db.getCourse(req.params.id)
+      .then((data) => {
+        if (!data) {
+          res.sendStatus(404);
+        } else {
+          res.status(200).send(data);
+        }
+      })
+      .catch(() => {
+        res.sendStatus(404);
+      });
+  });
+
   //Update
   app.put('/api/about/:id', (req, res) => {
+    if (req.body.courseObj.course_id) {
+      res.status(400).send('Cannot update course_id. You must delete the new id, delete this id, and then post a whole new object.');
+      return;
+    }
     db.updateCourse(req.params.id, req.body.courseObj)
       .then((modCount) => {
         modCount ? res.sendStatus(204) : res.sendStatus(404);
@@ -122,7 +140,8 @@ app.use(express.static('./public'));
         res.sendStatus(200);
       })
       .catch((err) => {
-        err.slice(0, 3) === '404' ? res.sendStatus(404) : res.sendStatus(500);
+        console.log(err);
+        //err.slice(0, 3) === '404' ? res.sendStatus(404) : res.sendStatus(500);
       });
   })
 

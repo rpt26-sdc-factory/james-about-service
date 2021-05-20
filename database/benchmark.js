@@ -1,10 +1,12 @@
+//Load environment
 const path = require('path');
 require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
 
+//Load classes
 const Course = require('./classes/Course');
 const DBManager = require('./DBManager');
 
-
+//benchmarking functions
 var courseGenerationBenchmark = () => {
   console.log('Peforming Data Generation Benchmark...');
 
@@ -44,11 +46,9 @@ var insertionBenchmark = () => {
   return new Promise(async (resolve) => {
     //CONFIG+SETUP
     var f = true;
-    const databases = [
-      new DBManager('cassandra'),
-      new DBManager('json'),
-      new DBManager('mongo'),
-    ];
+    const databases = process.env.USE_DBS.split('').map(db => {
+      return new DBManager(db);
+    });
 
     //ACTUAL INSERTION PROCESS
     var insert = (database) => {
@@ -100,15 +100,15 @@ var insertionBenchmark = () => {
   });
 };
 
-var benchmarks = [
-  //courseGenerationBenchmark,
-  insertionBenchmark
-];
+var benchmarks = [];
 
-(async () => {
-  for (var i = 0; i < benchmarks.length; i++) {
-    var s = await benchmarks[i]();
-    console.log(s);
-  }
+process.env.BENCHMARKS.split(',').indexOf('CourseGeneration') !== -1 ? benchmarks.push(courseGenerationBenchmark) : null;
+process.env.BENCHMARKS.split(',').indexOf('CourseInsertion') !== -1 ? benchmarks.push(insertionBenchmark) : null;
+
+
+//run the benchmarks
+Promise.all(benchmarks.map((bm) => {
+  return bm().then(console.log);
+})).then(() => {
   process.exit(0);
-})();
+});

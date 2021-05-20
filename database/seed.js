@@ -4,11 +4,8 @@ require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
 const Course = require('./classes/Course.js');
 const DBManager = require('./DBManager.js');
 
-const dbs = [
-  new DBManager('mongo'),
-  //new DBManager('json'),
-  //new DBManager('cassandra')
-];
+const dbs = process.env.NODE_ENV !== 'production' ?
+  process.env.USE_DBS.split(',').map(dbString => { return new DBManager(dbString); }) : [new DBManager()];
 
 if (!dbs.length) {
   throw('No databases to seed. Cancelling seed.');

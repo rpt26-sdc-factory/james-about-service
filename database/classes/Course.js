@@ -23,10 +23,10 @@ const genLangs = (smallGen = false) => {
   ];
   var usedLangs = [];
   if (smallGen) {
-    usedLangs.push(languages[Math.floor(Math.random() * (languages.length - 1)) + 1]);
+    usedLangs.push(languages[Math.floor(Math.random() * (languages.length))]);
   } else {
     languages.forEach((lang) => {
-        Math.random() < .05 ? usedLangs.push(languages[Math.floor(Math.random() * languages.length)]) : null;
+        Math.random() < .05 ? usedLangs.push(lang) : null;
     });
   }
   return usedLangs;
@@ -39,9 +39,9 @@ const genDescription = (smallGen = false) => {
 };
 const genOutcomes = (smallGen = false) => {
   return {
-    direction: Math.floor(Math.random()*100) / 100,
-    benefit: Math.floor(Math.random()*100) / 100,
-    promo: Math.floor(Math.random()*100) / 100
+    direction: Math.floor(Math.random() * 100) / 100,
+    benefit: Math.floor(Math.random() * 100) / 100,
+    promo: Math.floor(Math.random() * 100) / 100
   }
 };
 const genMetadata = (smallGen = false) => {
