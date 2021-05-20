@@ -101,7 +101,7 @@ class DBManager {
       case 'cassandra':
         //Cassandra interaction code goes here
         return this.connection.then(() => {
-          return retryUntilSuccess(50, this.cassandra.client.execute.bind(this.cassandra.client), courseObj, { prepare: true });
+          return retryUntilSuccess(50, this.cassandra.client.execute.bind(this.cassandra.client), this.cassandra.queries.insert, courseObj , { prepare: true });
         });
         break;
 
@@ -111,7 +111,21 @@ class DBManager {
 
       case 'json':
         //JSON interaction code goes here
-        return this.json.write(this.json.filepath, courseObj);
+        return this.connection.then(() => {
+          return (new Promise((resolve, reject) => {
+            fs.access(this.json.filepath, (err) => {
+              err ? reject(err) : resolve(this.json.filepath);
+            })
+          })
+            .then(() => {
+              return ',' + JSON.stringify(courseObj);
+            })
+            .catch(() => {
+              return '[' + JSON.stringify(courseObj);
+            })).then((data) => {
+              return this.json.write(data);
+            });
+        });
     }
     return new Promise((r) => { r() });
   };
@@ -134,9 +148,9 @@ class DBManager {
         //Cassandra interaction code goes here
         var batches = [];
         var curBatch = [];
-        while (courseObjArr.length) {
-          curBatch.push({ query: this.cassandra.queries.insert, params: courseObjArr.pop() });
-          if (curBatch.length === 5 || courseObjArr.length === 0) {
+        for(var i = 0; i < courseObjArr.length; i++) {
+          curBatch.push({ query: this.cassandra.queries.insert, params: courseObjArr[i] });
+          if (curBatch.length === 5 || i === courseObjArr.length - 1) {
             batches.push([...curBatch]);
             curBatch = [];
           }
