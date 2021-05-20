@@ -27,9 +27,18 @@ const retryUntilSuccess = async (delay, asyncFunction, ...args) => {
 
 
 class DBManager {
-  constructor(db = process.env.USE_DBS.split(',')[0]) {
+  constructor(db) {
+
+    if(!db) {
+      try {
+        db = process.env.USE_DBS.split(',')[0];
+      } catch (e) {
+        throw('No DB for DBManager selected or found in environment variable!');
+      }
+    }
 
     console.log(`Created ${db} manager.`);
+
     this.database = db;
     this[db] = {};
     this.connection;
