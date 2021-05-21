@@ -13,7 +13,7 @@ const bodyParser = require('body-parser');
 
 //Load Database
 const DBManager = require('../database/DBManager');
-const db = new DBManager();
+const db = DBManager();
 
 //Register Middleware
 app.use(cors());
