@@ -45,6 +45,7 @@ Promise.all(dbs.map((db) => {
         console.log('');
         console.timeEnd('Longest Seed Chunk took');
         console.time('Longest Seed Chunk took');
+        console.log('------------------------------------------\n');
       }
 
       cChunk++;
@@ -69,8 +70,11 @@ Promise.all(dbs.map((db) => {
   }
   return prom;
 }).then(async () => {
-  console.log('inserted', process.env.SEEDCOUNT, 'records');
+  console.log('\n\n------------------------------------------');
+  console.log('Seed complete!');
+  console.log('Inserted', process.env.SEEDCOUNT, 'records');
   console.timeEnd('Seed Timer');
+  console.log('------------------------------------------\n\n');
   await Promise.all(dbs.map(db => {
     return db.closeConnection();
   }))

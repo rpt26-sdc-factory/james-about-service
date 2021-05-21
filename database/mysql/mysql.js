@@ -1,4 +1,4 @@
-const DBManager = require('./DBManager');
+const DBManager = require('../classes/DBManager');
 var emptypromise = new Promise(resolve => resolve());
 
 

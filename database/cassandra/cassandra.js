@@ -1,11 +1,11 @@
-const DBManager = require('./DBManager');
-const retryUntilSuccess = require('./helpers/retry');
+const DBManager = require('../classes/DBManager');
+const retryUntilSuccess = require('./retry');
 
 module.exports = class CassandraManager extends DBManager {
   constructor() {
     super('cassandra');
 
-    var temp = require('../../cassandra');
+    var temp = require('.');
     this.client = temp.client;
     this.queries = temp.queries;
     this.keyspace = temp.keyspace;

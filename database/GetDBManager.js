@@ -8,7 +8,7 @@ function GetDBManager(db) {
   }
 
   try{
-    return new (require(`./classes/DBManagers/${db}.js`))();
+    return new (require(`./${db}/${db}.js`))();
   } catch (e) {
     console.log(db);
     throw(e);

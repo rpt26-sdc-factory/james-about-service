@@ -1,11 +1,11 @@
-const DBManager = require('./DBManager');
+const DBManager = require('../classes/DBManager');
 var emptypromise = new Promise(resolve => resolve());
 
 module.exports = class MongoManager extends DBManager {
   constructor() {
     super('mongo');
-    this.connection = require('../../mongo/index');
-    this.CourseModel = require('../../mongo/models/courseModel.js');
+    this.connection = require('.');
+    this.CourseModel = require('./models/courseModel.js');
   }
 
   insertCourse(courseObj) {

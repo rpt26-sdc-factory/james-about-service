@@ -1,4 +1,4 @@
-const DBManager = require('./DBManager');
+const DBManager = require('../classes/DBManager');
 const path = require('path');
 const fs = require('fs');
 
@@ -6,7 +6,7 @@ module.exports = class JSONManager extends DBManager {
   constructor() {
     super('json');
 
-    this.filepath = './database/json/' + process.env.ABOUT_DATABASE + '.db.json';
+    this.filepath = './database/json/db/' + process.env.ABOUT_DATABASE + '.db.json';
     this.connection = new Promise((resolve) => {
       this.write = (string) => {
         return new Promise((resolve, reject) => {
