@@ -4,6 +4,9 @@ module.exports = class DBManager {
     this.connection;
     console.log(`Created ${db} Manager`);
   }
+  handleFailedConnection(error) {
+
+  }
   deleteAllCourses() {
     console.log(`Deleting all courses in ${this.database} database!`);
   }
