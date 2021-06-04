@@ -5,6 +5,12 @@ switch(process.env.NODE_ENV) {
   default:
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.dev.env'))});
     break;
+  case 'benchmark':
+    require('dotenv').config({path: path.resolve(path.join(__dirname, '.bm.env'))});
+    break;
+  case 'fullscale-dev':
+    require('dotenv').config({path: path.resolve(path.join(__dirname, '.dev.fullscale.env'))});
+    break;
   case 'production':
     require('dotenv').config({path: path.resolve(path.join(__dirname, '.prod.env'))});
     break;

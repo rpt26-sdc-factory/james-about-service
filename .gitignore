@@ -27,3 +27,6 @@ public/
 
 ## Env variables ##
 *.env
+
+## Hidden Files ##
+*.json

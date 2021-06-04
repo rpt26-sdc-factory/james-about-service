@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../server/index');
-const { db } = require('../database/db');
 
 describe('Server Configuration', () => {
   let server;
@@ -220,7 +219,7 @@ describe('Server Configuration', () => {
     })
   });
 
-  afterAll(async () => {
-    await db.close();
-  });
+//  afterAll(async () => {
+//    await db.close();
+//  });
 });
