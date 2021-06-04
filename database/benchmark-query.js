@@ -40,8 +40,8 @@ var getBenchmark = () => {
       var times = [];
 
       for (let j = 0; j < queriesToRun; j++) {
-        j % 50 ? null : Logger.printloadingBar(j / queriesToRun);
-        var rec = Math.floor(Math.random() * 1000000) + 9000000;
+        j % 50 ? null : Logger.printloadingBar(j / queriesToRun); // update the loading bar less frequently to save processing power
+        var rec = Math.floor(Math.random() * 1000000) + 9000000; //generate random record in last 10% of database
         try {
           let start = performance.now();
           await dbs[i].getCourse(rec);
