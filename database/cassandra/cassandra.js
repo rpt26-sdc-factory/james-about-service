@@ -14,6 +14,7 @@ module.exports = class CassandraManager extends DBManager {
     this.connection = this.client.connect()
       .catch((error) => {
         console.error('Could not connect to cassandra!\n', error);
+        return null;
       })
       .then(this.client.execute(this.queries.createTable));
   }
@@ -21,7 +22,7 @@ module.exports = class CassandraManager extends DBManager {
 
   insertCourse(courseObj) {
     return this.connection.then(() => {
-      return retryUntilSuccess(50, this.client.execute.bind(this.client), this.queries.insert, courseObj, { prepare: true });
+      return retryUntilSuccess(50, this.client.execute.bind(this.client), ['BusyConnectionError'], this.queries.insert, courseObj, { prepare: true });
     });
   }
 
@@ -39,7 +40,7 @@ module.exports = class CassandraManager extends DBManager {
 
     return this.connection.then(() => {
       return Promise.all(batches.map(batch => {
-        return retryUntilSuccess(300, this.client.batch.bind(this.client), batch, { prepare: true });
+        return retryUntilSuccess(300, this.client.batch.bind(this.client), ['BusyConnectionError'], batch, { prepare: true });
       }));
     });
   }
@@ -47,14 +48,16 @@ module.exports = class CassandraManager extends DBManager {
 
   getCourse(id) {
     return this.connection.then(() => {
-      return this.client.execute(this.queries.getByID, [id + ''], { prepare: true });
+      return retryUntilSuccess(0, this.client.execute.bind(this.client), ['BusyConnectionError'], this.queries.getByID, [id + ''], { prepare: true });
+    }).then(results => {
+      return results.rows[0];
     });
   }
 
 
   updateCourse(id, updateObj) {
     return Promise.all(Object.keys(updateObj).map(key => {
-      return retryUntilSuccess(50, this.client.execute.bind(this.client), this.queries.update[key], [updateObj[key], id], { prepare: true });
+      return retryUntilSuccess(50, this.client.execute.bind(this.client), ['BusyConnectionError'], this.queries.update[key], [updateObj[key], id], { prepare: true });
     })).then((results) => {
       return results[0].rows[0]['[applied]'];
     });

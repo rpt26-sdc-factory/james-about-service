@@ -10,7 +10,7 @@ function GetDBManager(db) {
   try{
     return new (require(`./${db}/${db}.js`))();
   } catch (e) {
-    console.log(db);
+    console.log(db + 'not supported!');
     throw(e);
   }
 };

@@ -12,8 +12,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 //Load Database
-const DBManager = require('../database/DBManager');
-const db = DBManager();
+const db = require('../database/GetDBManager')();
 
 //Register Middleware
 app.use(cors());
