@@ -23,9 +23,7 @@
     "test": "NODE_ENV=test node ./database/seedRunner.js; jest --coverage test",
     "test-debug": "jest --detectOpenHandles",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "benchmark-seed": "NODE_ENV=benchmark node ./database/benchmark-seed.js",
-    "benchmark-prod": "NODE_ENV=production node ./database/benchmark-query.js",
-    "benchmark-dev": "NODE_ENV=fullscale-dev node ./database/benchmark-query.js"
+    "benchmarkSeed": "NODE_ENV=benchmark node ./database/benchmark.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.13.10",
@@ -37,10 +35,10 @@
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "mongoose": "^5.12.7",
-    "pg": "^8.6.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "regenerator-runtime": "^0.13.7"
+    "regenerator-runtime": "^0.13.7",
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
@@ -62,7 +60,6 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7",
-    "perf_hooks": "^0.0.1",
     "style-loader": "^2.0.0",
     "supertest": "^6.1.3",
     "webpack": "^5.24.2",

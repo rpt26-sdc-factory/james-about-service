@@ -20,7 +20,9 @@ var queries = {
     PRIMARY KEY (course_id)
     )`,
 
-  dropTable: `TRUNCATE Table courses`,
+  dropTable: `DROP Table courses`,
+
+  //createKeyspace: `CREATE KEYSPACE ${keyspace} WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1}`,
 
   insert: `INSERT INTO courses (
     course_id,
@@ -45,6 +47,3 @@ var queries = {
 };
 
 module.exports = {keyspace, client, queries};
-
-
-//createKeyspace: `CREATE KEYSPACE ${keyspace} WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1}`,
