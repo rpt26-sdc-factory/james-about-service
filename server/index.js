@@ -2,6 +2,10 @@
 const path = require('path');
 require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
 
+try {
+  require('newrelic');
+} catch (e) {}
+
 //Load Express
 const express = require('express');
 const app = express();
@@ -45,11 +49,11 @@ app.use(express.static('./public'));
           res.sendStatus(404);
         } else {
           var dataToReturn = {
-            what_you_will_learn: data.what_you_will_learn,
-            skills_you_will_gain: data.skills_you_will_gain,
             course_id: data.course_id,
             recent_views: data.recent_views,
-            description: data.description
+            description: data.description,
+            what_you_will_learn: data.what_you_will_learn,
+            skills_you_will_gain: data.skills_you_will_gain
           };
           dataToReturn.metadata = [
             {

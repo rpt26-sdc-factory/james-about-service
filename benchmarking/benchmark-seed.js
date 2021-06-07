@@ -6,8 +6,8 @@ require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
 const { performance } = require('perf_hooks');
 
 //Load classes
-const Course = require('./classes/Course');
-const DBManager = require('./GetDBManager');
+const Course = require('../database/classes/Course');
+const DBManager = require('../database/GetDBManager');
 const Logger = require('../Logger');
 
 const logger = new Logger('./logs/benchmarks/seeding/');
