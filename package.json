@@ -26,7 +26,9 @@
     "benchmark-seed": "NODE_ENV=benchmark node ./database/benchmark-seed.js",
     "benchmark-prod": "NODE_ENV=production node ./database/benchmark-query.js",
     "benchmark-dev": "NODE_ENV=fullscale-dev node ./database/benchmark-query.js",
-    "k6-get-bm": "k6 run --vus 1000 --duration 10m ./benchmarking/k6/get.js"
+    "k6get": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/get.js",
+    "k6post": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/post.js",
+    "k6put": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/put.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.13.10",

@@ -2,6 +2,13 @@ import http from 'k6/http';
 import { sleep } from 'k6';
 
 export default function () {
-  http.get('http://localhost:3002/api/about/' + Math.floor(Math.random() * 1000000) + 9000000);
+
+  var getRandomCourse = () => {
+    return Math.random() < .85 ?
+      (Math.floor(Math.random() * 1000000) + 9000000) :
+      (Math.floor(Math.random() * 10000000))
+  }
+
+  http.get('http://localhost:3002/api/about/' + getRandomCourse());
   sleep(1);
 }

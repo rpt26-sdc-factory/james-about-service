@@ -25,9 +25,25 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static('./public'));
 
+var errorResponses = {
+  noCourseObj: (res) => {
+    res.status(400).send('Request body must have key "courseObj" with Value Object containing course data.');
+  },
+  noCourseId: (res) => {
+    res.status(400).send('property course_id must be defined on an object with name "courseObj".');
+  },
+  noIdUpdates: (res) => {
+    res.status(400).send('Cannot update course_id. You must delete the new id, delete this id, and then post a whole new object.');
+  }
+}
+
 { //Routes
   //Create
   app.post('/api/about', (req, res) => {
+    if(req.body.courseObj === undefined) {
+      errorResponses.noCourseObj(res);
+      return;
+    }
     if(req.body.courseObj.course_id !== undefined) {
       db.insertCourse(req.body.courseObj)
         .then(() => {
@@ -37,12 +53,15 @@ app.use(express.static('./public'));
           res.status(500).send(err);
         })
     } else {
-      res.status(400).send('property course_id must be defined on an object with name "courseObj".');
+      errorResponses.noCourseId(res);
     }
   });
 
   //Read
   app.get('/api/about/:id', (req, res) => {
+
+    if(req.params.id > 10000000) { res.sendStatus(400); return; } //This would not be used in a real project. This is simply to cut off any floating records not intended to be seen.
+
     db.getCourse(req.params.id)
       .then((data) => {
         if (!data) {
@@ -99,7 +118,6 @@ app.use(express.static('./public'));
               outcome: 'got a pay increase or promotion',
             },
           ];
-          console.log(dataToReturn)
           res.send(dataToReturn).status(200);
         }
       })
@@ -124,8 +142,12 @@ app.use(express.static('./public'));
 
   //Update
   app.put('/api/about/:id', (req, res) => {
+    if (req.body.courseObj === undefined) {
+      errorResponses.noCourseObj(res);
+      return;
+    } else {
     if (req.body.courseObj.course_id) {
-      res.status(400).send('Cannot update course_id. You must delete the new id, delete this id, and then post a whole new object.');
+      errorResponses.noIdUpdates(res);
       return;
     }
     db.updateCourse(req.params.id, req.body.courseObj)
@@ -135,6 +157,7 @@ app.use(express.static('./public'));
       .catch((err) => {
         res.send(err);
       })
+    }
   });
 
   //Delete
@@ -145,7 +168,6 @@ app.use(express.static('./public'));
       })
       .catch((err) => {
         console.log(err);
-        //err.slice(0, 3) === '404' ? res.sendStatus(404) : res.sendStatus(500);
       });
   })
 
