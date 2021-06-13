@@ -1,5 +1,5 @@
 const path = require('path');
-require(path.join(__dirname, "..", 'environments', 'envLoader.js'));
+require('../environments/envLoader.js');
 
 const Course = require('./classes/Course.js');
 const DBManager = require('./GetDBManager.js');
