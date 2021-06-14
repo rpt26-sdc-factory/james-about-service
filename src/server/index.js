@@ -231,7 +231,6 @@ var getFromDB = (id) => {
         ${appstr}
         <script>
           window._initialAboutServiceData = ${JSON.stringify(results.data)};
-          console.log('test')
         </script>
       `);
     });
