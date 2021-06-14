@@ -25,7 +25,10 @@
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "benchmark-seed": "NODE_ENV=benchmark node ./database/benchmark-seed.js",
     "benchmark-prod": "NODE_ENV=production node ./database/benchmark-query.js",
-    "benchmark-dev": "NODE_ENV=fullscale-dev node ./database/benchmark-query.js"
+    "benchmark-dev": "NODE_ENV=fullscale-dev node ./database/benchmark-query.js",
+    "k6get": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/get.js",
+    "k6post": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/post.js",
+    "k6put": "k6 run --vus 1000 --duration 1m ./benchmarking/k6/put.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.13.10",
@@ -37,6 +40,7 @@
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "mongoose": "^5.12.7",
+    "newrelic": "^7.5.0",
     "pg": "^8.6.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
