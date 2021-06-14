@@ -200,7 +200,7 @@ var getFromDB = (id) => {
     }
     console.log(`getting /${req.params.id} index.html`);
     getFromDB(req.params.id).then(results => {
-      const appStr = renderToString(<About course={results.data}/>);
+      let appStr = renderToString(<About course={results.data}/>);
       if (results.code === 200) {
         res.status(200).send(`<!DOCTYPE html>
         <html>
@@ -221,10 +221,18 @@ var getFromDB = (id) => {
   });
 
   server.get('/:id/innerHTML', (req, res) => {
+    if (isNaN(req.params.id)) {
+      res.status(404).send();
+      return;
+    }
     getFromDB(req.params.id).then(results => {
+      let appstr = renderToString(<About course={results.data}/>);
       res.send(`
-        ${renderToString(<About />)}
-        <script>window._initialAboutServiceData = ${JSON.stringify(results.data)}; console.log('test')</script>
+        ${appstr}
+        <script>
+          window._initialAboutServiceData = ${JSON.stringify(results.data)};
+          console.log('test')
+        </script>
       `);
     });
   });
