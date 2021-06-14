@@ -141,7 +141,7 @@ var rpsBenchmark = () => {
 };
 
 const benchmarks = [
-  //getBenchmark,
+  getBenchmark,
   rpsBenchmark,
 ];
 
