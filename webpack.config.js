@@ -49,7 +49,7 @@ const serverConfig = {
   externals: [
     NodeExternals(),
     ({context, request = ''}, cb) => {
-      if (/database|environments|newrelic|benchmarking/.test(request)) {
+      if (/environments|newrelic|benchmarking/.test(request)) {
         if (/..\//.test(request)) {
           return cb(null, `commonjs ${request.slice(request.lastIndexOf('../') + 1)}`);
         }
@@ -66,7 +66,7 @@ const serverConfig = {
       },
       { //js and jsx loader
         test: /\.(js|jsx)$/,
-        exclude: /node_modules|environments|database|newrelic|benchmarking/,
+        exclude: /node_modules|environments|newrelic|benchmarking/,
         use: ['babel-loader']
       }
     ]

@@ -8,8 +8,17 @@ import Skills from './components/skills/Skills.jsx';
 class About extends React.Component {
   constructor(props) {
     super(props);
+    let course;
+
+    if(props.course) {
+      course = props.course;
+    } else {
+      course = window._initialAboutServiceData;
+      delete window._initialAboutServiceData;
+    }
+
     this.state = {
-      courseInfo: this.props.course,
+      courseInfo: course,
       svgs: {},
       expanded: '',
     };
@@ -34,5 +43,4 @@ class About extends React.Component {
     );
   }
 }
-
 export default About;

@@ -14,7 +14,7 @@ const PORT = 3002;
 //Load React
 const React = require('react');
 const {renderToString} = require('react-dom/server');
-const About = require('../shared/About.jsx');
+const About = require('../shared/About.jsx').default;
 
 
 //Load Middleware
@@ -200,6 +200,7 @@ var getFromDB = (id) => {
     }
     console.log(`getting /${req.params.id} index.html`);
     getFromDB(req.params.id).then(results => {
+      const appStr = renderToString(<About course={results.data}/>);
       if (results.code === 200) {
         res.status(200).send(`<!DOCTYPE html>
         <html>
@@ -208,20 +209,23 @@ var getFromDB = (id) => {
             <link rel="stylesheet" href="index.css">
           </head>
           <body>
-            <div id='about'>${renderToString(<About />)}</div>
+            <div id='about'>${appStr}</div>
+            <script>window._initialAboutServiceData = ${JSON.stringify(results.data)}; console.log('test')</script>
             <script src='/index.js'></script>
           </body>
         </html>`);
       } else {
         res.status(results.code).send(results.data);
       }
-
     });
   });
 
-  server.get('/:id/container', (req, res) => {
+  server.get('/:id/innerHTML', (req, res) => {
     getFromDB(req.params.id).then(results => {
-      res.send(`<div id='about'>${renderToString(<About />)}</div>`);
+      res.send(`
+        ${renderToString(<About />)}
+        <script>window._initialAboutServiceData = ${JSON.stringify(results.data)}; console.log('test')</script>
+      `);
     });
   });
 
