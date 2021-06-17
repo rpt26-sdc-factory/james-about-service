@@ -11,9 +11,9 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "prestart": "webpack --mode production",
+    "compile": "webpack --mode production",
     "start": "NODE_ENV=production node server.js",
-    "watchDev": "webpack --mode development --watch",
+    "compile-dev": "webpack --mode development --watch",
     "start-dev": "NODE_ENV=development nodemon server.js",
     "seed": "NODE_ENV=production node ./database/seed.js",
     "seed-dev": "NODE_ENV=development node ./database/seed.js",

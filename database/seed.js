@@ -8,7 +8,7 @@ const logger = new Logger('./logs/seeding/', 'latest.log', true);
 const lbOptions = {width: 60, fillChar: '⋗', curChar: '⨠', emptyChar: '∞', precision: 1};
 
 const dbs = process.env.NODE_ENV !== 'production' ?
-  process.env.USE_DBS.split(',').map(dbString => { return DBManager(dbString); }) : [DBManager()];
+  process.env.USE_DBS.split(',').map(dbString => { return DBManager(dbString); }) : [new DBManager()];
 
 if (!dbs.length) {
   throw ('No databases to seed. Cancelling seed.');

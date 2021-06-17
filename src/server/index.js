@@ -198,7 +198,6 @@ var getFromDB = (id) => {
       res.status(404).send();
       return;
     }
-    console.log(`getting /${req.params.id} index.html`);
     getFromDB(req.params.id).then(results => {
       let appStr = renderToString(<About course={results.data}/>);
       if (results.code === 200) {
@@ -210,7 +209,7 @@ var getFromDB = (id) => {
           </head>
           <body>
             <div id='about'>${appStr}</div>
-            <script>window._initialAboutServiceData = ${JSON.stringify(results.data)}; console.log('test')</script>
+            <script>window._initialAboutServiceData = ${JSON.stringify(results.data)};</script>
             <script src='/index.js'></script>
           </body>
         </html>`);
