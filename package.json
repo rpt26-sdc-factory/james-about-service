@@ -33,10 +33,12 @@
   "dependencies": {
     "@babel/preset-env": "^7.13.10",
     "axios": "^0.21.1",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.19.0",
     "cassandra-driver": "^4.6.2",
     "core-js": "^3.9.1",
     "cors": "^2.8.5",
+    "docker-machine": "^3.0.1",
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "ignore-loader": "^0.1.2",

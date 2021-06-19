@@ -1,12 +1,18 @@
 FROM loadimpact/k6:latest AS k6official
-FROM node:15.12.0-alpine3.13
+FROM ubuntu:latest
+RUN apt-get update
+RUN apt-get install sudo curl openssh-client -y
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install nodejs -y
 COPY --from=k6official /usr/bin/k6 /usr/bin/k6
 RUN npm install -g webpack-cli
 RUN npm install -g webpack
-RUN apk update
-RUN apk add --no-cache --virtual docker-cli python3 python3-dev libffi-dev openssl-dev gcc libc-dev make python3 py3-pip py-pip curl libffi-dev openssl-dev gcc libc-dev rust cargo make
-RUN apk add docker
-RUN pip install docker-compose
+RUN apt-get install apt-transport-https ca-certificates curl gnupg lsb-release -y
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install docker-ce docker-ce-cli containerd.io -y
 # install Docker Machine
 RUN curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine
 RUN chmod +x /tmp/docker-machine
