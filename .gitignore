@@ -24,9 +24,11 @@ coverage
 build/
 dist/
 public/
+server.js
 
 ## Env variables ##
 *.env
 
 ## Hidden Files ##
 *.json
+newrelic.js
