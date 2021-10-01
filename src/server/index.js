@@ -199,7 +199,7 @@ module.exports = (async () => {
 
     //Load Database
     const DBManager = require('../../database/GetDBManager');
-    const db = new DBManager();
+    const db = DBManager();
 
     //Register Middleware
     server.use(cors());
