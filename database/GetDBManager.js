@@ -8,11 +8,11 @@ function GetDBManager(db) {
   }
 
   try{
-    return require(`./${db}/${db}.js`);
+    return new (require(`./${db}/${db}.js`))();
   } catch (e) {
     console.log(db + 'not supported!');
     throw(e);
   }
 };
 
-module.exports = GetDBManager();
+module.exports = GetDBManager;
